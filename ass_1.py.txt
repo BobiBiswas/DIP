@@ -1,0 +1,83 @@
+import matplotlib.pyplot as plt
+import cv2
+
+def main():
+    img_path='./Capture.PNG'
+    img = cv2.imread(img_path)
+    print(img.shape, img.max(), img.min())
+
+    # img=cv2.imread(img_path)
+    rgb_img=cv2.imread(img_path)
+    # print(rgb_img.shape)
+
+
+    grayscale_img=cv2.cvtColor(rgb_img,cv2.COLOR_RGB2GRAY)
+    print(grayscale_img.shape)
+
+    # binary_img=cv2.threshold(rgb_img,127,255,cv2.THRESH_BINARY)
+    binary_img = cv2.threshold(grayscale_img, 50, 255, cv2.THRESH_BINARY)[1]
+    
+
+    #rgb image display  and channel
+    plt.figure(figsize=(15,15))
+    plt.subplot(2,3,1)
+    plt.title('rgb')
+    #display korbo
+    plt.imshow(rgb_img)
+
+    plt.subplot(2,3,2)
+    plt.imshow(rgb_img[ :, :, 0],cmap='gray')
+
+    plt.subplot(2,3,3)
+    plt.imshow(rgb_img[ :, :, 1],cmap='gray')
+
+    plt.subplot(2,3,4)
+    plt.imshow(rgb_img[ :, :, 2],cmap='gray')
+
+    plt.subplot(2,3,5)
+    plt.imshow(grayscale_img,cmap='gray')
+    # plt.imshow(grayscale_img)
+    
+
+    plt.subplot(2,3,6)
+    plt.imshow(binary_img,cmap='gray')
+
+    plt.savefig('./img.jpg')
+    # plt.imshow(binary_img)
+
+    plt.figure(figsize=(15,15))
+    hist_blue = cv2.calcHist([rgb_img],[0],None,[256],[0,256])
+
+    hist_green = cv2.calcHist([rgb_img],[1],None,[256],[0,256])
+
+    hist_red = cv2.calcHist([rgb_img],[2],None,[256],[0,256])
+
+    hist_gray = cv2.calcHist([grayscale_img],[0],None,[256],[0,256])
+
+    hist_binary = cv2.calcHist([binary_img],[0],None,[256],[0,256])
+
+    plt.subplot(2,3,1)
+    plt.title('blue')
+    plt.plot(hist_blue)
+
+    plt.subplot(2,3,2)
+    plt.title('green')
+    plt.plot(hist_green)
+
+    plt.subplot(2,3,3)
+    plt.title('red')
+    plt.plot(hist_red)
+
+    plt.subplot(2,3,4)
+    plt.title('gray')
+    plt.plot(hist_gray)
+
+    plt.subplot(2,3,5)
+    plt.title('binary')
+    plt.plot(hist_binary)
+
+    plt.savefig('./histogram.jpg')
+
+
+if __name__ == '__main__':
+    main()
